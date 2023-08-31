@@ -1,6 +1,6 @@
+import Validator from "validatorjs";
 import { Request, Response, NextFunction } from "express";
 import Helpers from "../../helpers/Helper";
-import Validator from "validatorjs";
 import User from "../../db/models/User";
 
 const RegisterValidation = async (
@@ -34,25 +34,24 @@ const RegisterValidation = async (
     }
 
     const user = await User.findOne({
-        where: {
-            email: data.email
-        }
+      where: {
+        email: data.email,
+      },
     });
 
     if (user) {
-        const errorData = {
-            errors: {
-                email: [
-                    "Email already used"
-                ]
-            }
-        };
-        return res.status(400).send(Helpers.ResponseData(400, "BadRequest", errorData, null))
+      const errorData = {
+        errors: {
+          email: ["Email already used"],
+        },
+      };
+      return res
+        .status(400)
+        .send(Helpers.ResponseData(400, "BadRequest", errorData, null));
     }
-
     next();
-  } catch (error) {
-    return res.status(500).send(Helpers.ResponseData(500, "", error, null))
+  } catch (error: any) {
+    return res.status(500).send(Helpers.ResponseData(500, "", error, null));
   }
 };
 
